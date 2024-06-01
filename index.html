@@ -1,7 +1,165 @@
 <!DOCTYPE html>
-<html>
-<body>
-<h1>Hello World!</h1>
-<p>I'm hosted with GitHub Pages.</p>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbershop</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Roboto', sans-serif; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        .navbar { margin-bottom: 20px; }
+        .card { margin-bottom: 20px; }
+        .confirmation { padding: 20px; background-color: #f8f9fa; border-radius: 5px; }
+    </style>
+</head>
+<body data-spy="scroll" data-target="#navbar" data-offset="70">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="navbar">
+        <a class="navbar-brand" href="#">Barbershop</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                <li class="nav-item"><a class="nav-link" href="#barbers">Barbers</a></li>
+                <li class="nav-item"><a class="nav-link" href="#booking">Booking</a></li>
+                <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="container text-center my-5">
+        <h1>Welcome to Our Barbershop</h1>
+        <p class="lead">Classic Cuts & Modern Styles</p>
+    </header>
+
+    <section id="services" class="container">
+        <h2 class="text-center">Our Services</h2>
+        <div class="row">
+            <!-- Example of service card -->
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="haircut.jpg" class="card-img-top" alt="Haircut">
+                    <div class="card-body">
+                        <h5 class="card-title">Haircut</h5>
+                        <p class="card-text">$25</p>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#service1" aria-expanded="false" aria-controls="service1">More Info</button>
+                        <div class="collapse" id="service1">
+                            <p class="mt-3">A classic haircut including wash and style.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Repeat for other services -->
+        </div>
+    </section>
+
+    <section id="barbers" class="container">
+        <h2 class="text-center">Meet Our Barbers</h2>
+        <input type="text" id="searchBarber" class="form-control mb-3" placeholder="Search for a barber...">
+        <div class="row" id="barberList">
+            <!-- Example of barber profile card -->
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="barber1.jpg" class="card-img-top" alt="Barber">
+                    <div class="card-body">
+                        <h5 class="card-title">John Doe</h5>
+                        <p class="card-text">Specialty: Haircut</p>
+                        <p>Experienced in classic and modern styles.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Repeat for other barbers -->
+        </div>
+    </section>
+
+    <section id="booking" class="container">
+        <h2 class="text-center">Book an Appointment</h2>
+        <form>
+            <div class="form-group">
+                <label for="serviceSelect">Select Service</label>
+                <select class="form-control" id="serviceSelect">
+                    <option>Haircut</option>
+                    <option>Beard Trim</option>
+                    <option>Shave</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="barberSelect">Select Barber</label>
+                <select class="form-control" id="barberSelect">
+                    <option>John Doe</option>
+                    <option>Jane Smith</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dateSelect">Select Date</label>
+                <input type="date" class="form-control" id="dateSelect">
+            </div>
+            <div class="form-group">
+                <label for="timeSelect">Select Time</label>
+                <input type="time" class="form-control" id="timeSelect">
+            </div>
+            <div class="form-group">
+                <label for="customerName">Your Name</label>
+                <input type="text" class="form-control" id="customerName">
+            </div>
+            <div class="form-group">
+                <label for="customerEmail">Your Email</label>
+                <input type="email" class="form-control" id="customerEmail">
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="showConfirmation(event)">Book Now</button>
+        </form>
+    </section>
+
+    <section id="contact" class="container">
+        <h2 class="text-center">Contact Us</h2>
+        <p class="text-center">Address: 123 Main Street, City, State</p>
+        <p class="text-center">Phone: (123) 456-7890</p>
+        <p class="text-center">Email: info@barbershop.com</p>
+        <div id="map" class="my-3"></div>
+    </section>
+
+    <div id="confirmation" class="container text-center my-5 confirmation" style="display:none;">
+        <h2>Booking Confirmed!</h2>
+        <p>Thank you for booking with [Barbershop Name].</p>
+        <p><strong>Details:</strong></p>
+        <p id="confirmDetails"></p>
+        <p>See you soon!</p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function showConfirmation(event) {
+            event.preventDefault();
+            const service = document.getElementById('serviceSelect').value;
+            const barber = document.getElementById('barberSelect').value;
+            const date = document.getElementById('dateSelect').value;
+            const time = document.getElementById('timeSelect').value;
+            const name = document.getElementById('customerName').value;
+            const email = document.getElementById('customerEmail').value;
+            const details = `Service: ${service}<br>Barber: ${barber}<br>Date & Time: ${date} at ${time}<br>Name: ${name}<br>Email: ${email}`;
+            document.getElementById('confirmDetails').innerHTML = details;
+            document.getElementById('confirmation').style.display = 'block';
+        }
+
+        // Simple search function for barbers
+        document.getElementById('searchBarber').addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase();
+            const barberCards = document.querySelectorAll('#barberList .card');
+            barberCards.forEach(card => {
+                const barberName = card.querySelector('.card-title').textContent.toLowerCase();
+                if (barberName.includes(searchTerm)) {
+                    card.parentElement.style.display = 'block';
+                } else {
+                    card.parentElement.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
