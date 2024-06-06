@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="remixicons/fonts/remixicon.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+
+    <title>Torino's Barbershop</title>
+
+
+  </head>
+
+  <body id="home" data-bs-spy="scroll" data-bs-target=" .navbar">
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#"
+          ><img class="logo3" src="./img/logo4.png" alt=""/></a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#home">Home</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="#Location">Location</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="#aboutUs">About Us</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#Stylists">Stylists</a>
+              </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="#Services">Services</a>
+            </li>
+
+          </ul>
+          <!--Book Now Button -->
+          <button type="button" class="btn btn-outline-brand ms-lg-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBooking">Book</button>
+        </div>
+    </div>
+</nav>
+    <!-- // NAVBAR -->
+
+
+ <!-- Booking Offcanvas Sidebar -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasBooking">
+  <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Book an Appointment</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+      <section id="booking" class="container">
+          <h2 class="text-center my-4">Finish Your Booking</h2>
+          <form id="bookingForm">
+              <div class="form-group">
+                  <label for="serviceSelect">Select Service</label>
+                  <select class="form-control" id="serviceSelect">
+                      <option value="haircut">Haircut ($45)</option>
+                      <option value="beardTrim">Beard Trim ($25)</option>
+                      <option value="lineUp">Line Up ($20)</option>
+                  </select>
+              </div>
+              <div class="form-group">
+                  <label for="barberSelect">Select Barber</label>
+                  <select class="form-control" id="barberSelect">
+                      <option>Kendrick Johnson</option>
+                      <option>Marcus Rivera</option>
+                      <option>Liam Harris</option>
+                  </select>
+              </div>
+              <div class="form-group">
+                  <label for="dateSelect">Select Date</label>
+                  <input type="date" class="form-control" id="dateSelect">
+              </div>
+              <div class="form-group">
+                  <label for="timeSelect">Select Time</label>
+                  <input type="time" class="form-control" id="timeSelect">
+              </div>
+              <div class="form-group">
+                  <label for="customerName">Your Name</label>
+                  <input type="text" class="form-control" id="customerName" required>
+              </div>
+              <div class="form-group">
+                  <label for="customerEmail">Your Email</label>
+                  <input type="email" class="form-control" id="customerEmail" required>
+              </div>
+
+              <div class="group-booking">
+                <div id="groupBookingForm">
+                  <!-- Guest entries will be dynamically added here -->
+              </div>
+              <button type="button" id="addGuest" class="btn btn-secondary">Add Guest</button>              
+              </div>
+
+              <div class="discount-summary">
+                <p>Total Discount: <span id="totalDiscount">0%</span></p>
+                <p>Total Price: <span id="totalPrice">$0.00</span></p>
+            </div>
+
+              <button type="submit" class="btn btn-primary" onclick="showConfirmation(event)">Finish Booking</button>
+          </form>
+
+          
+
+          <!-- Booking Confirmation Section -->
+          <div id="confirmation" class="text-center my-5 confirmation" style="display:none;">
+              <h2>Booking Confirmed!</h2>
+              <p>Thank you for booking with us!</p>
+              <p><strong>Details:</strong></p>
+              <p id="confirmDetails"></p>
+              <p>See you soon!</p>
+          </div>
+      </section>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const groupBookingForm = document.getElementById("groupBookingForm");
+    const addGuestButton = document.getElementById("addGuest");
+    const totalDiscount = document.getElementById("totalDiscount");
+    const totalPrice = document.getElementById("totalPrice");
+    const selectedServiceDisplay = document.getElementById("selectedService");
+
+    let GuestCount = 0;
+    let discount = 0;
+    let total = 0;
+    let selectedService = "haircut"; // Default selected service
+
+    addGuestButton.addEventListener("click", () => {
+        GuestCount++;
+        const newGuestEntry = document.createElement("div");
+        newGuestEntry.className = "booking-entry";
+        newGuestEntry.innerHTML = `
+            <label for="Guest${GuestCount}">Guest ${GuestCount}:</label>
+            <select id="Guest${GuestCount}Service" name="Guest${GuestCount}Service">
+                <option value="haircut">Haircut</option>
+                <option value="beardTrim">Beard Trim</option>
+                <option value="lineUp">Line Up</option>
+            </select>
+            <button type="button" class="btn btn-third removeGuest">Remove</button>
+        `;
+        groupBookingForm.appendChild(newGuestEntry);
+
+        calculateDiscountAndPrice();
+    });
+
+    groupBookingForm.addEventListener("click", (event) => {
+        if (event.target.classList.contains("removeGuest")) {
+            const entryToRemove = event.target.parentElement;
+            const index = Array.from(groupBookingForm.children).indexOf(entryToRemove);
+            
+            entryToRemove.remove();
+            GuestCount--;
+            calculateDiscountAndPrice();
+            
+            if (index === 0) {
+                const GuestLabels = groupBookingForm.querySelectorAll("label");
+                GuestLabels.forEach((label, idx) => {
+                    label.textContent = `Guest ${idx + 1}:`;
+                });
+            }
+        }
+    });
+
+    document.getElementById("serviceSelect").addEventListener("change", () => {
+        selectedService = document.getElementById("serviceSelect").value;
+        selectedServiceDisplay.textContent = selectedService; // Update selected service display
+        calculateDiscountAndPrice();
+    });
+
+    function calculateDiscountAndPrice() {
+    let haircutPrice = 45;
+    let beardTrimPrice = 25;
+    let lineUpPrice = 20;
+
+    let haircutCount = 0;
+    let beardTrimCount = 0;
+    let lineUpCount = 0;
+
+    // Get the selected service from the main dropdown
+    let mainService = document.getElementById("serviceSelect").value;
+
+    // Update prices based on the selected service
+    switch (mainService) {
+        case "haircut":
+            haircutPrice = 45;
+            break;
+        case "beardTrim":
+            beardTrimPrice = 25;
+            break;
+        case "lineUp":
+            lineUpPrice = 20;
+            break;
+        default:
+            break;
+    }
+
+    for (let i = 1; i <= GuestCount; i++) {
+        let service = document.getElementById(`Guest${i}Service`).value;
+        switch (service) {
+            case "haircut":
+                haircutCount++;
+                break;
+            case "beardTrim":
+                beardTrimCount++;
+                break;
+            case "lineUp":
+                lineUpCount++;
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Calculate total price including the main service
+    let totalMainService = 0;
+    switch (mainService) {
+        case "haircut":
+            totalMainService = haircutPrice;
+            break;
+        case "beardTrim":
+            totalMainService = beardTrimPrice;
+            break;
+        case "lineUp":
+            totalMainService = lineUpPrice;
+            break;
+        default:
+            break;
+    }
+
+    // Calculate total for additional services
+    let additionalServicesTotal = (haircutCount * haircutPrice) + (beardTrimCount * beardTrimPrice) + (lineUpCount * lineUpPrice);
+
+    // Calculate total before discount
+    total = totalMainService + additionalServicesTotal;
+
+    // Calculate discount based on number of Guests
+    discount = GuestCount > 5 ? 25 : GuestCount * 5;
+
+    // Calculate discounted total price
+    let discountedTotal = total - (total * discount / 100);
+
+    // Update UI with calculated values
+    totalDiscount.textContent = `${discount}%`;
+    totalPrice.textContent = `$${discountedTotal.toFixed(2)}`;
+    selectedServiceDisplay.textContent = mainService; // Update selected service display
+}
+
+});
+
+function showConfirmation(event) {
+    event.preventDefault();
+    const service = document.getElementById('serviceSelect').value;
+    const barber = document.getElementById('barberSelect').value;
+    const date = document.getElementById('dateSelect').value;
+    const time = document.getElementById('timeSelect').value;
+    const name = document.getElementById('customerName').value;
+    const email = document.getElementById('customerEmail').value;
+    const details = `Service: ${service}<br>Barber: ${barber}<br>Date & Time: ${date} at ${time}<br>Name: ${name}<br>Email: ${email}`;
+    document.getElementById('confirmDetails').innerHTML = details;
+    document.getElementById('bookingForm').style.display = 'none';
+    document.getElementById('confirmation').style.display = 'block';
+}
+</script>
+
+        
+    </div>
+</div>
+ <!-- Booking Offcanvas Sidebar -->
+
+
+    <!-- HOME -->
+    <section id="HERO" data-aos="fade">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <h1 class="display-1">Torino's Barbershop</h1>
+            <p>
+                Experience the perfect blend of tradition and style. We offer top-quality cuts, so book an appointment now.
+            </p>
+            <a href="#" class="btn btn-brand" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBooking">Book Now</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- // HOME -->
+
+
+    <!-- LOCATION-->
+    <section id="Location" data-aos="fade">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-4">
+            <h1>Location</h1>
+            <p>Address: 789 Maple Avenue, Toronto, ON, Canada</p>
+            <p>Come visit us</p>
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Opening Hours</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Weekdays</td>
+                  <td>9AM - 5PM</td>
+                </tr>
+                <tr>
+                  <td>Weekends</td>
+                  <td>11PM - 4 PM</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="col-lg-5 offset-lg-3">
+            <div class="google-map">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2885.7021416491416!2d-79.37495777670368!3d43.67516418755873!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4cb55d4209333%3A0xa4d67b4d68a25834!2sMaple%20Ave%2C%20Toronto%2C%20ON!5e0!3m2!1sen!2sca!4v1717383316664!5m2!1sen!2sca "
+                width="600"
+                height="450"
+                style="border: 0"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+            <!--<img class="image1" src="./img/babrershop2.jpg" alt="">-->
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- // LOCATION -->
+
+
+    <!-- ABOUT US -->
+    <section id="aboutUs" data-aos="fade">
+      <div class="container">
+        <div class="row align-items-center">
+          <img
+            class="image1"
+            src="./img/barbershopIMG.jpg"
+            alt=""
+            height="400px"
+          />
+          <div>
+            <center>
+              <h1>About Our Barbershop</h1>
+              <p>
+                Welcome to Torino's Barbershop, your go-to spot for
+                modern cuts in the heart of Toronto. Our barbers provide haircuts ensuring you leave looking and
+                feeling your best. Stay updated by following us, so we can offer you the finest services. At
+                our Barbershop, we value community, creating a welcoming
+                environment for all our clients.
+              </p>
+              <p>
+                Thank you for choosing Torino's Barbershop. We look forward to
+                serving you.
+              </p>
+            </center>
+          </div>
+          <div class="col-lg-5 offset-lg-3"></div>
+        </div>
+      </div>
+    </section>
+    <!-- // ABOUT US -->
+
+
+
+
+        <!-- STYLISTS -->
+        <section id="Stylists" data-aos="fade">
+            <div class="container text-center">
+              <div class="row">
+                <div class="col-12 intro text-center">
+                  <h5>Our Team</h5>
+                  <h1>Meet our Stylists</h1>
+                  <p> 
+                    Meet the team to get to know our skilled barbers who are dedicated to providing exceptional grooming services.
+                  </p>
+                </div>
+              </div>
+    
+              <div class="row text-center">
+                <div class="col-lg-4 col-md-6">
+                    <div class="team-member">
+                        <h5><span style="color: rgb(142, 80, 80);">Kendrick</span> Johnson</h5>
+                        <img class="image3" src="./img/barber4.jpg" alt="">
+                        <p>Kendrick specializes in classic haircuts and modern styles.</p>
+                        <div class="socials">
+                            <a href="#"><i class="bi bi-instagram fill"></i></a>
+                            <a href="#"><i class="bi bi-twitter-x"></i></a>
+                            <a href="#"><i class="bi bi-tiktok"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="team-member">
+                        <h5><span style="color: rgb(142, 80, 80);">Marcus</span> Rivera</h5>
+                        <img class="image3" src="./img/barber5.jpg" alt="">
+                        <p>Marcus is an expert in beard trims and line-ups.</p>
+                        <div class="socials">
+                            <a href="#"><i class="bi bi-instagram fill"></i></a>
+                            <a href="#"><i class="bi bi-twitter-x"></i></a>
+                            <a href="#"><i class="bi bi-tiktok"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="team-member">
+                        <h5><span style="color: rgb(142, 80, 80);">Liam</span> Harris</h5>
+                        <img class="image3" src="./img/barber6.jpg" alt="">
+                        <p>Liam excels in contemporary haircuts.</p>
+                        <div class="socials">
+                            <a href="#"><i class="bi bi-instagram fill"></i></a>
+                            <a href="#"><i class="bi bi-twitter-x"></i></a>
+                            <a href="#"><i class="bi bi-tiktok"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+              </div>    
+              <div class="cta-btns text-center">
+                <a href="#" class="btn btn-brand me-sm-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBooking">Appointment</a>
+                <a href="#footer" class="btn btn-outline-brand me-sm-2">Get in touch</a>
+              </div>
+      
+              
+      
+      
+              </div>
+            </div>
+          </section>
+        <!-- // STYLISTS -->
+
+
+
+    <!-- SERVICES -->
+    <section id="Services" data-aos="fade">
+      <div class="container text-center">
+        <div class="row">
+          <div class="col-12 intro">
+            <h5>Services</h5>
+            <h1>What we offer</h1>
+            <p> 
+                Discover our top-notch grooming services, including classic haircuts, modern styles, and luxurious shaves.
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-4 col-md-6">
+            <div class="Services">
+              <img class="beardTrim" src="./img/beard-trim-3.jpg" alt="" height="445">
+              <div class="content">
+                <h5>Beard Trim</h5>
+                <h6>$25</h6>
+                <p>
+                    Keep your beard looking sharp with our precise beard trim service.
+                </p>
+                <a href="#" class="btn btn-brand icon" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBooking">Choose <i class="bi bi-cart"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <div class="Services">
+              <img class="haircut" src="./img/barber3.jpg" alt="" / height="445">
+              <div class="content">
+                <h5>Haircut</h5>
+                <h6>$45</h6>
+                <p> 
+                    Experience a stylish and fresh look with our expert haircut service.
+                </p>
+                <a href="#" class="btn btn-brand icon" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBooking">Choose <i class="bi bi-cart"></i></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <div class="Services">
+              <img class="lineup" src="./img/lineup3.jpeg" alt="" height="445">
+              <div class="content">
+                <h5>Line Up</h5>
+                <h6>$20</h6>
+                <p>
+                    Achieve a clean and defined look with our precise line-up service.
+                </p>
+                <a href="#" class="btn btn-brand icon" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBooking">Choose <i class="bi bi-cart"></i></a>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </section>
+    <!-- // SERVICES -->
+
+
+    <!--TRANSITIONS-->
+    
+
+
+    <!--FOOTER-->
+<footer id="footer" data-aos="fade">
+    <div class="footer">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-4">
+                    <h3 class="mb-4">Torino's Barbershop</h3>
+                    <p>Thanks for choosing us. Your satisfaction is our priority.</p>
+                    <div class="socials">
+                        <a href="#"><i class="bi bi-instagram fill"></i></a>
+                        <a href="#"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#"><i class="bi bi-tiktok"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <h3>Contact Us</h3>
+                    <p><span style="color: rgb(142, 80, 80);"><i class="bi bi-telephone"></i> </span> (416) 555-1234 </p>
+                    <p><span style="color: rgb(142, 80, 80);"><i class="bi bi-envelope-fill"></i> </span> info@torinobarbershop.ca </p>
+                    <p><span style="color: rgb(142, 80, 80);"><i class="bi bi-geo-alt-fill"></i> </span> 789 Maple Avenue, Toronto, ON, Canada </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!--FOOTER-->
+
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+    AOS.init();
+  </script>
+  
+
+
+  </body>
+</html>
