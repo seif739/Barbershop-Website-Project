@@ -496,6 +496,18 @@ footer{
 
 }
 
+#cancel-btn{
+    padding-right: 40px;
+    padding-left: 40px;
+    color: #000000;
+}
+
+#reschedule-btn{
+    padding-right: 30px;
+    padding-left: 30px;
+    color: #000000;
+}
+
 /* Total Price and Discount Summary */
 .discount-summary {
     margin-top: 20px;
