@@ -133,6 +133,9 @@
               <p><strong>Details:</strong></p>
               <p id="confirmDetails"></p>
               <p>See you soon!</p>
+              <button class="btn btn-brand" id="reschedule-btn">Reschedule</button>
+              <button class=" btn btn-outline-brand" id="cancel-btn">Cancel</button>
+            
           </div>
       </section>
   </div>
@@ -285,6 +288,18 @@ function showConfirmation(event) {
     document.getElementById('confirmDetails').innerHTML = details;
     document.getElementById('bookingForm').style.display = 'none';
     document.getElementById('confirmation').style.display = 'block';
+
+    // Reschedule button functionality
+    document.getElementById('reschedule-btn').addEventListener('click', () => {
+            document.getElementById('bookingForm').style.display = 'block';
+            document.getElementById('confirmation').style.display = 'none';
+    });
+
+    document.getElementById('cancel-btn').addEventListener('click', () => {
+            // Redirect to the home page
+            window.location.href = '/'; // Replace with your home page URL
+        });
+
 }
 </script>
 
