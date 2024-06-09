@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -151,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let GuestCount = 0;
     let discount = 0;
     let total = 0;
-    let selectedService = "haircut"; // Default selected service
+    let selectedService = "haircut"; 
 
     addGuestButton.addEventListener("click", () => {
         GuestCount++;
@@ -255,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
             break;
     }
 
-    // Calculate total for additional services
+    
     let additionalServicesTotal = (haircutCount * haircutPrice) + (beardTrimCount * beardTrimPrice) + (lineUpCount * lineUpPrice);
 
     // Calculate total before discount
@@ -264,10 +263,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Calculate discount based on number of Guests
     discount = GuestCount > 5 ? 25 : GuestCount * 5;
 
-    // Calculate discounted total price
+    
     let discountedTotal = total - (total * discount / 100);
 
-    // Update UI with calculated values
+    // Update values
     totalDiscount.textContent = `${discount}%`;
     totalPrice.textContent = `$${discountedTotal.toFixed(2)}`;
     selectedServiceDisplay.textContent = mainService; // Update selected service display
@@ -288,14 +287,13 @@ function showConfirmation(event) {
     document.getElementById('bookingForm').style.display = 'none';
     document.getElementById('confirmation').style.display = 'block';
 
-    // Reschedule button functionality
+    // Reschedule button
     document.getElementById('reschedule-btn').addEventListener('click', () => {
             document.getElementById('bookingForm').style.display = 'block';
             document.getElementById('confirmation').style.display = 'none';
     });
 
     document.getElementById('cancel-btn').addEventListener('click', () => {
-            // Redirect to the home page
             window.location.href = '/'; 
         });
 
@@ -363,7 +361,7 @@ function showConfirmation(event) {
                 referrerpolicy="no-referrer-when-downgrade"
               ></iframe>
             </div>
-            <!--<img class="image1" src="./img/babrershop2.jpg" alt="">-->
+        
           </div>
         </div>
       </div>
@@ -536,9 +534,6 @@ function showConfirmation(event) {
       </div>
     </section>
     <!-- // SERVICES -->
-
-
-    <!--TRANSITIONS-->
     
 
 
