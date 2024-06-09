@@ -111,7 +111,6 @@
 
               <div class="group-booking">
                 <div id="groupBookingForm">
-                  <!-- Guest entries will be dynamically added here -->
               </div>
               <button type="button" id="addGuest" class="btn btn-secondary">Add Guest</button>              
               </div>
@@ -192,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("serviceSelect").addEventListener("change", () => {
         selectedService = document.getElementById("serviceSelect").value;
-        selectedServiceDisplay.textContent = selectedService; // Update selected service display
+        selectedServiceDisplay.textContent = selectedService;
         calculateDiscountAndPrice();
     });
 
@@ -297,7 +296,7 @@ function showConfirmation(event) {
 
     document.getElementById('cancel-btn').addEventListener('click', () => {
             // Redirect to the home page
-            window.location.href = '/'; // Replace with your home page URL
+            window.location.href = '/'; 
         });
 
 }
